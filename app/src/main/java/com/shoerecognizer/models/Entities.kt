@@ -3,17 +3,16 @@ package com.shoerecognizer.models
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "employees")
-data class Employee(
-    @PrimaryKey val employeeId: String,
-    val employeeName: String,
-    val department: String
+@Entity(tableName = "students")
+data class Student(
+    @PrimaryKey val studentId: String,
+    val studentName: String
 )
 
 @Entity(tableName = "shoes")
 data class Shoe(
     @PrimaryKey val shoeId: String,
-    val employeeId: String,
+    val studentId: String,
     val description: String
 )
 
@@ -21,6 +20,6 @@ data class Shoe(
 data class Embedding(
     @PrimaryKey(autoGenerate = true) val embeddingId: Int = 0,
     val shoeId: String,
-    val embeddingVector: String, // Stored as JSON or comma-separated string for simplicity
+    val embeddingVector: String,
     val createdDate: Long
 )

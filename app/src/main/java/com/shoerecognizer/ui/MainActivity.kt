@@ -18,6 +18,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
 import com.shoerecognizer.ui.theme.ShoeRecognizerTheme
+import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.layout.height
 
 class MainActivity : ComponentActivity() {
     
@@ -41,7 +43,15 @@ class MainActivity : ComponentActivity() {
                     AppNavigation(viewModel)
                 } else {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text("Camera permission is required.")
+                        androidx.compose.foundation.layout.Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text("Camera permission is required to recognize shoes.")
+                            androidx.compose.foundation.layout.Spacer(modifier = Modifier.height(16.dp))
+                            androidx.compose.material3.Button(onClick = { checkCameraPermission() }) {
+                                Text("Grant Permission")
+                            }
+                        }
                     }
                 }
             }

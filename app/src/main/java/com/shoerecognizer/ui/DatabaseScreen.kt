@@ -22,7 +22,7 @@ fun DatabaseScreen(viewModel: MainViewModel, onNavigateBack: () -> Unit) {
             LazyColumn(modifier = Modifier.weight(1f)) {
                 items(shoesList) { pair ->
                     val shoe = pair.first
-                    val employeeName = pair.second
+                    val studentName = pair.second
                     
                     Card(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
                         Row(
@@ -30,7 +30,7 @@ fun DatabaseScreen(viewModel: MainViewModel, onNavigateBack: () -> Unit) {
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Column {
-                                Text("Employee: $employeeName")
+                                Text("Student: $studentName")
                                 Text("Desc: ${shoe.description}")
                                 Text("ID: ${shoe.shoeId.take(8)}...")
                             }

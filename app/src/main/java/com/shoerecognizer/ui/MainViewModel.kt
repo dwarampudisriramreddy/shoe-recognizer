@@ -63,12 +63,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 
                 if (bestMatchScore >= 0.85f && bestMatchShoeId != null) {
                     val shoe = repository.getShoe(bestMatchShoeId)
-                    val employee = shoe?.employeeId?.let { repository.getEmployee(it) }
+                    val student = shoe?.studentId?.let { repository.getStudent(it) }
                     
-                    if (employee != null) {
-                        _recognitionState.value = "Employee: ${employee.employeeName} (${(bestMatchScore * 100).toInt()}%)"
+                    if (student != null) {
+                        _recognitionState.value = "Student: ${student.studentName} (${(bestMatchScore * 100).toInt()}%)"
                     } else {
-                        _recognitionState.value = "Unknown Employee"
+                        _recognitionState.value = "Unknown Student"
                     }
                 } else {
                     _recognitionState.value = "Unknown Shoe"
@@ -79,20 +79,20 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
     
-    fun registerShoe(employeeId: String, employeeName: String, department: String, shoeDesc: String) {
+    fun registerShoe(studentId: String, studentName: String, shoeDesc: String) {
         val bitmapToRegister = lastCroppedBitmap ?: return
         viewModelScope.launch {
             _recognitionState.value = "Registering..."
             val embeddingVector = extractor?.extract(bitmapToRegister)
             if (embeddingVector != null) {
-                val emp = com.shoerecognizer.models.Employee(employeeId, employeeName, department)
+                val std = com.shoerecognizer.models.Student(studentId, studentName)
                 val shoeId = java.util.UUID.randomUUID().toString()
-                val shoe = com.shoerecognizer.models.Shoe(shoeId, employeeId, shoeDesc)
+                val shoe = com.shoerecognizer.models.Shoe(shoeId, studentId, shoeDesc)
                 val embString = SimilarityUtil.formatEmbedding(embeddingVector)
                 val emb = com.shoerecognizer.models.Embedding(shoeId = shoeId, embeddingVector = embString, createdDate = System.currentTimeMillis())
                 
                 try {
-                    repository.addEmployee(emp)
+                    repository.addStudent(std)
                 } catch (e: Exception) {}
                 repository.addShoe(shoe)
                 repository.addEmbedding(emb)
@@ -108,8 +108,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             val shoes = repository.getAllShoes()
             val data = shoes.map { shoe ->
-                val emp = repository.getEmployee(shoe.employeeId)
-                Pair(shoe, emp?.employeeName ?: "Unknown")
+                val std = repository.getStudent(shoe.studentId)
+                Pair(shoe, std?.studentName ?: "Unknown")
             }
             _shoesList.value = data
         }

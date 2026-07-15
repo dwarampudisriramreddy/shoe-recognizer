@@ -13,9 +13,8 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun RegistrationScreen(viewModel: MainViewModel, onNavigateBack: () -> Unit) {
-    var employeeId by remember { mutableStateOf("") }
-    var employeeName by remember { mutableStateOf("") }
-    var department by remember { mutableStateOf("") }
+    var studentId by remember { mutableStateOf("") }
+    var studentName by remember { mutableStateOf("") }
     var shoeDescription by remember { mutableStateOf("") }
     
     val currentImage = viewModel.lastCroppedBitmap
@@ -48,25 +47,17 @@ fun RegistrationScreen(viewModel: MainViewModel, onNavigateBack: () -> Unit) {
         Spacer(modifier = Modifier.height(16.dp))
         
         OutlinedTextField(
-            value = employeeId,
-            onValueChange = { employeeId = it },
-            label = { Text("Employee ID") },
+            value = studentId,
+            onValueChange = { studentId = it },
+            label = { Text("Student ID") },
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(8.dp))
         
         OutlinedTextField(
-            value = employeeName,
-            onValueChange = { employeeName = it },
-            label = { Text("Employee Name") },
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        
-        OutlinedTextField(
-            value = department,
-            onValueChange = { department = it },
-            label = { Text("Department") },
+            value = studentName,
+            onValueChange = { studentName = it },
+            label = { Text("Student Name") },
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(8.dp))
@@ -81,11 +72,11 @@ fun RegistrationScreen(viewModel: MainViewModel, onNavigateBack: () -> Unit) {
         
         Button(
             onClick = {
-                viewModel.registerShoe(employeeId, employeeName, department, shoeDescription)
+                viewModel.registerShoe(studentId, studentName, shoeDescription)
                 onNavigateBack()
             },
             modifier = Modifier.fillMaxWidth(),
-            enabled = currentImage != null && employeeId.isNotBlank() && employeeName.isNotBlank()
+            enabled = currentImage != null && studentId.isNotBlank() && studentName.isNotBlank()
         ) {
             Text("Save to Database")
         }
