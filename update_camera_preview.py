@@ -1,4 +1,10 @@
-package com.shoerecognizer.ui
+import os
+
+base_dir = "/home/sri/shoe-recognizer/app/src/main/java/com/shoerecognizer/ui"
+camera_ui_path = os.path.join(base_dir, "CameraPreview.kt")
+
+with open(camera_ui_path, "w") as f:
+    f.write("""package com.shoerecognizer.ui
 
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
@@ -80,3 +86,6 @@ fun CameraPreviewScreen(viewModel: MainViewModel) {
         )
     }
 }
+""")
+
+print("Updated CameraPreviewScreen to collect state from ViewModel")

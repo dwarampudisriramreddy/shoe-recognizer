@@ -1,4 +1,10 @@
-package com.shoerecognizer.ui
+import os
+
+base_dir = "/home/sri/shoe-recognizer/app/src/main/java/com/shoerecognizer/ui"
+main_activity_path = os.path.join(base_dir, "MainActivity.kt")
+
+with open(main_activity_path, "w") as f:
+    f.write("""package com.shoerecognizer.ui
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -62,3 +68,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+""")
+
+print("Updated MainActivity to request camera permissions and show CameraPreviewScreen")
