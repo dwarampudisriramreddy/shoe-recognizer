@@ -93,7 +93,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 
                 try {
                     repository.addEmployee(emp)
-                } catch (e: Exception) {})
+                } catch (e: Exception) {}
                 repository.addShoe(shoe)
                 repository.addEmbedding(emb)
                 _recognitionState.value = "Registered successfully!"
