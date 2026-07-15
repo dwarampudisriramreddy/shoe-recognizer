@@ -7,7 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun RegistrationScreen(viewModel: MainViewModel) {
+fun RegistrationScreen(viewModel: MainViewModel, onNavigateBack: () -> Unit) {
     var employeeId by remember { mutableStateOf("") }
     var employeeName by remember { mutableStateOf("") }
     var department by remember { mutableStateOf("") }
@@ -51,11 +51,12 @@ fun RegistrationScreen(viewModel: MainViewModel) {
         
         Button(
             onClick = {
-                // Trigger camera capture to crop and embed
+                // For simplicity, we are simulating taking a photo by using a dummy feature or returning to camera
+                onNavigateBack()
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Capture Shoe Images")
+            Text("Cancel / Go Back")
         }
     }
 }

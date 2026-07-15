@@ -7,25 +7,29 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.shoerecognizer.camera.ShoeAnalyzer
 import java.util.concurrent.Executors
 
 @Composable
-fun CameraPreviewScreen(viewModel: MainViewModel) {
+fun CameraPreviewScreen(viewModel: MainViewModel, onNavigateToRegister: () -> Unit) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
     
-    // Collect the recognition text from the viewmodel
     val recognitionText by viewModel.recognitionState.collectAsState()
     
     Box(modifier = Modifier.fillMaxSize()) {
@@ -70,7 +74,6 @@ fun CameraPreviewScreen(viewModel: MainViewModel) {
             modifier = Modifier.fillMaxSize()
         )
         
-        // Add overlay drawing the fixed rectangle and recognition text
         AndroidView(
             factory = { ctx -> BoundingBoxOverlay(ctx) },
             update = { view ->
@@ -78,5 +81,14 @@ fun CameraPreviewScreen(viewModel: MainViewModel) {
             },
             modifier = Modifier.fillMaxSize()
         )
+        
+        FloatingActionButton(
+            onClick = onNavigateToRegister,
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(32.dp)
+        ) {
+            Text("Register", modifier = Modifier.padding(16.dp))
+        }
     }
 }

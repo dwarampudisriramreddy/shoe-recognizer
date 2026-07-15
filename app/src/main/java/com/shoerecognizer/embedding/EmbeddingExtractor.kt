@@ -51,8 +51,27 @@ class EmbeddingExtractor(context: Context) {
         val tensor = OnnxTensor.createTensor(ortEnvironment, floatBuffer, shape)
         val result = session.run(Collections.singletonMap(inputName, tensor))
         
-        val output = result[0].value as Array<FloatArray>
-        return output[0]
+        val value = result[0].value
+        var embedding: FloatArray? = null
+        if (value is Array<*>) {
+            if (value.isNotEmpty()) {
+                val first = value[0]
+                if (first is FloatArray) {
+                    // Shape: [1, 384]
+                    embedding = first
+                } else if (first is Array<*>) {
+                    if (first.isNotEmpty() && first[0] is FloatArray) {
+                        // Shape: [1, 257, 384], first token is usually CLS token
+                        val array3D = value as Array<Array<FloatArray>>
+                        embedding = array3D[0][0]
+                    }
+                }
+            }
+        } else if (value is FloatArray) {
+            embedding = value
+        }
+        
+        return embedding
     }
     
     fun close() {

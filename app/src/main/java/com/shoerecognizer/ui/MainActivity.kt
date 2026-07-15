@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             ShoeRecognizerTheme {
                 if (hasCameraPermission) {
-                    CameraPreviewScreen(viewModel)
+                    AppNavigation(viewModel)
                 } else {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         Text("Camera permission is required.")
