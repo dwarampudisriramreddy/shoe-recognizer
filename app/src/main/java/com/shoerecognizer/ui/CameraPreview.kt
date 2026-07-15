@@ -6,6 +6,7 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.FloatingActionButton
@@ -25,7 +26,7 @@ import com.shoerecognizer.camera.ShoeAnalyzer
 import java.util.concurrent.Executors
 
 @Composable
-fun CameraPreviewScreen(viewModel: MainViewModel, onNavigateToRegister: () -> Unit) {
+fun CameraPreviewScreen(viewModel: MainViewModel, onNavigateToRegister: () -> Unit, onNavigateToDatabase: () -> Unit) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
@@ -37,14 +38,11 @@ fun CameraPreviewScreen(viewModel: MainViewModel, onNavigateToRegister: () -> Un
             factory = { ctx ->
                 val previewView = PreviewView(ctx)
                 val executor = ContextCompat.getMainExecutor(ctx)
-                
                 cameraProviderFuture.addListener({
                     val cameraProvider = cameraProviderFuture.get()
-                    
                     val preview = Preview.Builder().build().also {
                         it.setSurfaceProvider(previewView.surfaceProvider)
                     }
-                    
                     val imageAnalyzer = ImageAnalysis.Builder()
                         .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                         .build()
@@ -53,21 +51,11 @@ fun CameraPreviewScreen(viewModel: MainViewModel, onNavigateToRegister: () -> Un
                                 viewModel.processFrame(croppedBitmap, box)
                             })
                         }
-                    
                     val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-                    
                     try {
                         cameraProvider.unbindAll()
-                        cameraProvider.bindToLifecycle(
-                            lifecycleOwner,
-                            cameraSelector,
-                            preview,
-                            imageAnalyzer
-                        )
-                    } catch(exc: Exception) {
-                        exc.printStackTrace()
-                    }
-                    
+                        cameraProvider.bindToLifecycle(lifecycleOwner, cameraSelector, preview, imageAnalyzer)
+                    } catch(exc: Exception) {}
                 }, executor)
                 previewView
             },
@@ -76,19 +64,21 @@ fun CameraPreviewScreen(viewModel: MainViewModel, onNavigateToRegister: () -> Un
         
         AndroidView(
             factory = { ctx -> BoundingBoxOverlay(ctx) },
-            update = { view ->
-                view.updateText(recognitionText)
-            },
+            update = { view -> view.updateText(recognitionText) },
             modifier = Modifier.fillMaxSize()
         )
         
-        FloatingActionButton(
-            onClick = onNavigateToRegister,
+        Row(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(32.dp)
         ) {
-            Text("Register", modifier = Modifier.padding(16.dp))
+            FloatingActionButton(onClick = onNavigateToDatabase, modifier = Modifier.padding(end = 16.dp)) {
+                Text("DB", modifier = Modifier.padding(16.dp))
+            }
+            FloatingActionButton(onClick = onNavigateToRegister) {
+                Text("Register", modifier = Modifier.padding(16.dp))
+            }
         }
     }
 }

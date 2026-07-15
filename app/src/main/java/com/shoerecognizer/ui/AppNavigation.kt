@@ -6,7 +6,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 
-// Simple custom navigation for simplicity instead of adding Navigation Compose dependency
 @Composable
 fun AppNavigation(viewModel: MainViewModel) {
     var currentScreen by remember { mutableStateOf("camera") }
@@ -14,9 +13,14 @@ fun AppNavigation(viewModel: MainViewModel) {
     when (currentScreen) {
         "camera" -> CameraPreviewScreen(
             viewModel = viewModel,
-            onNavigateToRegister = { currentScreen = "register" }
+            onNavigateToRegister = { currentScreen = "register" },
+            onNavigateToDatabase = { currentScreen = "database" }
         )
         "register" -> RegistrationScreen(
+            viewModel = viewModel,
+            onNavigateBack = { currentScreen = "camera" }
+        )
+        "database" -> DatabaseScreen(
             viewModel = viewModel,
             onNavigateBack = { currentScreen = "camera" }
         )

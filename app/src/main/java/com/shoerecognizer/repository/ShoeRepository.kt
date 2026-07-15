@@ -10,6 +10,12 @@ class ShoeRepository(private val dao: ShoeDao) {
     suspend fun addShoe(shoe: Shoe) = dao.insertShoe(shoe)
     suspend fun addEmbedding(embedding: Embedding) = dao.insertEmbedding(embedding)
     suspend fun getAllEmbeddings() = dao.getAllEmbeddings()
+    suspend fun getAllShoes() = dao.getAllShoes()
     suspend fun getShoe(id: String) = dao.getShoeById(id)
     suspend fun getEmployee(id: String) = dao.getEmployeeById(id)
+    
+    suspend fun deleteShoeAndEmbeddings(shoe: Shoe) {
+        dao.deleteEmbeddingsForShoe(shoe.shoeId)
+        dao.deleteShoe(shoe)
+    }
 }
