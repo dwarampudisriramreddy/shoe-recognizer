@@ -1,4 +1,10 @@
-package com.shoerecognizer.ui
+import os
+
+base_dir = "/home/sri/shoe-recognizer/app/src/main/java/com/shoerecognizer"
+
+vm_path = os.path.join(base_dir, "ui/MainViewModel.kt")
+with open(vm_path, "w") as f:
+    f.write("""package com.shoerecognizer.ui
 
 import android.app.Application
 import android.graphics.Bitmap
@@ -101,3 +107,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         extractor?.close()
     }
 }
+""")
+
+print("Updated MainViewModel with Database logic")
